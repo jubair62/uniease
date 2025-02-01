@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Section</title>
+    <link rel="stylesheet" href="css/SectionT.css">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <i class="fa-solid fa-school"></i>
+        <h2>UniEase</h2>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="Grades.html">Grades</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section id="profile">
+        <h2>Section details</h2>
+        <p><strong>SectionID:</strong> <span id="sectionid"></span></p>
+        <p><strong>Course:</strong> <span id="course"></span></p>
+        <p><strong>Instructor:</strong> <span id="instructor"></span></p>
+        <p><strong>Trimester:</strong> <span id="trimester"></span></p>
+        <p><strong>Year:</strong> <span id="year"></span></p>
+        <p><strong>Room:</strong> <span id="room"></span></p>
+        <p><strong>TimeslotID:</strong> <span id="timeslot"></span></p>
+    </section>
+    <section id="announcements">
+        <h2>Announcements</h2>
+        <div id="announcement">
+            <!-- Cards will be dynamically injected here -->
+        </div>
+        <form id="announcement-form">
+            <input type="text" id="announcement-input" placeholder="Type your announcement here">
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <section id="courseContent">
+        <h2>Course Content</h2>
+        <div id="Content">
+            <!-- Cards will be dynamically injected here -->
+        </div>
+        <form id="content-form">
+            <input type="text" id="content-input" placeholder="Type your content title here">
+            <input type="text" id="content" placeholder="Type your content here">
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+    <section id="EnrolledStudents">
+        <h2>Enrolled Students</h2>
+        <ol id="studentlist"></ol>
+    </section>
+    <section id="EnrolledStudents">
+        <h2>Requested Students</h2>   
+        <ol id="studentlist2"></ol>
+    </section>
+</main>
+<script>
+    const sectionID = localStorage.getItem('sectionid');
+    
+    // Fetch profile data from the server
+    fetch('http://localhost:3001/api/sectiont', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({sectionID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('sectionid').textContent = data.sec.sectionid;
+                document.getElementById('course').textContent = data.sec.coursename;
+                document.getElementById('instructor').textContent = data.sec.name;
+                document.getElementById('trimester').textContent = data.sec.trimester;
+                document.getElementById('year').textContent = data.sec.year;
+                document.getElementById('timeslot').textContent = data.sec.timeslotid;
+                document.getElementById('room').textContent = data.sec.roomno;
+
+                const card = document.createElement('div');
+                card.classList.add('course-card');
+                card.innerHTML = `
+                    <p>${data.sec.announcement}</p>
+                `;
+                document.getElementById('announcement').appendChild(card);
+
+                // const card2 = document.createElement('div');
+                // card2.classList.add('course-card');
+                // card2.innerHTML = `
+                // <p>${data.sec.coursecontenttitle}</p>   
+                // <a href=${data.sec.coursecontent}>${data.sec.coursecontent}</a>
+                // `;    
+                // document.getElementById('Content').appendChild(card2);
+
+            } else {
+                alert(data.message || 'Failed to fetch profile data.');
+            }
+        });
+
+    fetch('http://localhost:3001/api/content', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({sectionID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                //give the content in list
+                const contentList = document.createElement('ul');
+                data.content.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <p>${item.coursecontenttitle}</p>   
+                        <a href=${item.coursecontent}>${item.coursecontent}</a>
+                    `;
+                    contentList.appendChild(listItem);
+                });
+                document.getElementById('Content').appendChild(contentList);
+
+            } else {
+                alert(data.message || 'Failed to fetch content.');
+            }
+        });
+
+
+    // Submit announcement to the server
+        document.getElementById('announcement-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const Announcement = document.getElementById('announcement-input').value;
+
+        fetch('http://localhost:3001/api/announcement', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({sectionID, Announcement})
+        })
+            .then(response => response.json())
+            .then(data => {
+                    if (data.success) {
+                        alert('Announcement is published successfully.');
+                    } else {
+                        alert(data.message || 'Failed to accept student.');
+                    }
+            });
+    });
+
+    // Submit content to the server
+        document.getElementById('content-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const ContentTitle = document.getElementById('content-input').value;
+            const Content = document.getElementById('content').value;
+
+        fetch('http://localhost:3001/api/content2', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({sectionID, ContentTitle, Content})
+        })
+            .then(response => response.json())
+            .then(data => {
+                    if (data.success) {
+                        alert('Content is published successfully.');               
+                    } else {
+                        alert(data.message || 'Failed to accept student.');
+                    }
+        });
+
+    });
+    // Fetch enrolled students from the server
+    fetch('http://localhost:3001/api/enrolledstudents', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({sectionID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const studentList = document.getElementById('studentlist');
+                data.students.forEach(student => {
+                    const li = document.createElement('li');
+                    li.textContent = student.name;
+                    // li.appendChild(acceptButton);
+                    studentList.appendChild(li);
+                });
+            } else {
+                alert(data.message || 'Failed to fetch enrolled students.');
+            }
+        });
+
+    fetch('http://localhost:3001/api/enrolledstudents2', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({sectionID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const studentList = document.getElementById('studentlist2');
+                data.students.forEach(student => {
+                    const li = document.createElement('li');
+                    li.textContent = student.name;
+
+                    const acceptButton = document.createElement('button');
+                    acceptButton.textContent = 'Accept';
+                    acceptButton.addEventListener('click', () => {
+                        fetch('http://localhost:3001/api/accept', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({sectionID, studentID: student.studentid})
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Student accepted successfully.');
+                                    li.remove();
+                                } else {
+                                    alert(data.message || 'Failed to accept student.');
+                                }
+                            });
+                    });
+                    studentList.appendChild(li);
+                    studentList.appendChild(acceptButton);
+                });
+            } else {
+                alert(data.message || 'Failed to fetch enrolled students.');
+            }
+        });
+
+
+
+</script>
+</body>
+</html>

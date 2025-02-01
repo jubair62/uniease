@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>My Courses</title>
+    <link rel="stylesheet" href="css/DashboardT.css">
+</head>
+<body>
+<!-- Header Section -->
+<header>
+    <div class="logo">
+        <i class="fa-solid fa-school"></i>
+        <h2>UniEase</h2>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="CourseList.html">All Courses</a></li>
+            <li><a href="ProfileT.html">Profile</a></li>
+            <li><button id="logout">Logout</button></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Main Content -->
+<main>
+    <section id = "routine">
+        <h2>My Routine</h2>
+        <div id="routine-container" class="routine-container">
+            <!-- Cards will be dynamically injected here -->
+        </div>
+    </section>
+    <section id="courses">
+        <h2>Enrolled Courses</h2>
+        <div id="course-container" class="course-container">
+            <!-- Cards will be dynamically injected here -->
+        </div>
+    </section>
+</main>
+
+<!-- Footer Section -->
+<footer>
+    <div class="footer-links">
+        <a href="#">Contact Us</a>
+        <a href="#">Follow Us</a>
+        <a href="#">Privacy Policy</a>
+    </div>
+</footer>
+<script>
+    const instructorID = localStorage.getItem('instructorID')
+
+    fetch('http://localhost:3001/api/routinet', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({instructorID})
+})
+    .then((response) => response.json())
+     .then((data) => {
+          if (data.success) {
+                const container = document.getElementById('routine-container');
+                if (!container) {
+                 console.error('Routine container element not found.');
+                 return;
+                }
+                data.sec.forEach(routine => {
+                 const card = document.createElement('div');
+                 card.classList.add('routine-card');
+    
+                 // Escaping potential unsafe content
+                 const day = document.createElement('h3');
+                 day.textContent = `${routine.weekday}`;
+    
+                 const time = document.createElement('p');
+                 time.textContent = `Time: ${routine.starttime || 'Not Available'} - ${routine.endtime || 'Not Available'}`;
+    
+                 const course = document.createElement('p');
+                 course.textContent = `Course: ${routine.coursename || 'Not Available'}`;
+    
+                 card.appendChild(day);
+                 card.appendChild(time);
+                 card.appendChild(course);
+    
+                 container.appendChild(card);
+                });
+          } else {
+                alert('Failed to fetch routine.');
+          }
+     })
+     .catch(error => {
+          console.error('Error fetching routine:', error);
+          alert('An error occurred while fetching routine. Please try again later.');
+     });
+
+
+
+
+   fetch('http://localhost:3001/api/coursest', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({instructorID})
+})
+   .then((response) => response.json())
+    .then((data) => {
+        if (data.success) {
+            const container = document.getElementById('course-container');
+            if (!container) {
+                console.error('Course container element not found.');
+                return;
+            }
+            data.courses.forEach(course => {
+                const card = document.createElement('div');
+                card.classList.add('course-card');
+
+                // Escaping potential unsafe content
+                const courseName = document.createElement('h3');
+                courseName.textContent = `${course.coursename}`;
+
+                const section = document.createElement('p');
+                section.textContent = `Section: ${course.sectionid || 'Not Available'}`;
+
+                card.appendChild(courseName);
+                card.appendChild(section);
+
+                card.addEventListener('click', () => {
+
+                    localStorage.setItem("sectionid", course.sectionid);
+                    window.location.href = "/Uniease/public/SectionT.html";
+                });
+
+                container.appendChild(card);
+            });
+        } else {
+            alert('Failed to fetch courses.');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching courses:', error);
+        alert('An error occurred while fetching courses. Please try again later.');
+    });
+
+
+    document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('studentID');
+        window.location.href = "/Uniease/public/Login.html";
+    });
+
+</script>
+</body>
+</html>

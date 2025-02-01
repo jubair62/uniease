@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #0c0a0a;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #65c8ff;;
+    border-bottom: 1px solid #ddd;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Profile Section */
+main {
+    padding: 20px;
+}
+
+section#profile {
+    background: #a2d2ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+section#profile h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #0c0a0a;
+}
+
+section#profile p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+section#profile p span {
+    color: #0c0a0a;
+}
+
+section#EnrolledStudents {
+    background: #a2d2ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+section#announcements {
+    background: #a2d2ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+section#courseContent {
+    background: #a2d2ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+section#announcements form {
+    display: flex;
+    margin-top: 10px;
+
+}
+
+section#courseContent form {
+    display: flex;
+    margin-top: 10px;
+
+}
+
+
+section#announcements form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #17e4f3;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+section#courseContent form input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #17e4f3;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+section#announcements form button {
+    padding: 10px 20px;
+    background: #17e4f3;
+    border: none;
+    border-radius: 5px;
+    color: #0c0a0a;
+    cursor: pointer;
+}
+
+/* button */
+button {
+    padding: 10px 20px;
+    background: #17e4f3;
+    border: none;
+    border-radius: 5px;
+    color: #0c0a0a;
+    cursor: pointer;
+}

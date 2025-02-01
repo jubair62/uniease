@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Section</title>
+    <link rel="stylesheet" href="css/Grades.css">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <i class="fa-solid fa-school"></i>
+        <h2>UniEase</h2>
+    </div>
+</header>
+<main>
+    <section id="Students">
+        <h2>Enrolled Students</h2>
+        <div id="student-container" class="student-container">
+            <!-- Cards will be dynamically injected here -->
+        </div>
+    </section>
+</main>
+<script>
+    const sectionID = localStorage.getItem('sectionid');
+    
+    // Fetch profile data from the server
+    fetch('http://localhost:3001/api/gradess', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({sectionID})
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const container = document.getElementById('student-container');
+                if (!container) {
+                console.error('Student container element not found.');
+                return;
+                }
+                data.grades.forEach(student => {
+                    const card = document.createElement('div');
+                    card.classList.add('student-card');
+                    card.innerHTML = `
+                        <p>${student.name}</p>
+                        <p>${student.studentid}</p>
+                        <p>${student.courseid}</p>
+                    `;
+
+                    // create a drop down button for each grade
+                    const gradeButton = document.createElement('button');
+                    gradeButton.textContent = 'Grade';
+                    gradeButton.addEventListener('click', () => {
+                        const Finalmark = prompt('Enter Final Result:');
+                        if (Finalmark) {
+                            fetch('http://localhost:3001/api/grade', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({studentID: student.studentid, Finalmark, courseID: student.courseid})
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert('Grade submitted successfully.');
+                                        card.remove();
+                                    } else {
+                                        alert(data.message || 'Failed to submit grade.');
+                                    }
+                                });
+                        }
+                    });
+                    container.appendChild(card);
+                    container.appendChild(gradeButton);
+                });
+
+            } else {
+                alert(data.message || 'Failed to fetch profile data.');
+            }
+
+        });
+
+
+</script>
+</body>
+</html>

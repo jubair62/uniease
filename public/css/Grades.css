@@ -1,0 +1,133 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #0c0a0a;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #65c8ff;
+    border-bottom: 1px solid #ddd;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+}
+
+header .logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Profile Section */
+main {
+    padding: 20px;
+}
+
+/* .Students {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.Students .student-card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.Students .student-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.Students .student-card h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #0c0a0a;
+}
+
+.Students .student-card p {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.Students .student-card p span {
+    color: #007bff;
+    font-weight: bold;
+} */
+
+
+
+/* section#Students {
+    background: #a2d2ff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+}
+
+section#Students h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #0c0a0a;
+}
+
+section#Students p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+section#Students p span {
+    color: #0c0a0a;
+} */
+
+section#Students .student-card {
+    background: #a2d2ff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* margin-bottom: 1rem; */
+}
+
+section#Students .student-card h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #0c0a0a;
+}
+
+section#Students .student-card p {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #0c0a0a;
+}
+
+section#Students .student-card p span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 1rem 0;
+
+}

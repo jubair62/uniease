@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="css/Profile.css">
+</head>
+<body>
+<header>
+    <div class="logo">
+        <i class="fa-solid fa-school"></i>
+        <h2>UniEase</h2>
+    </div>
+</header>
+<main>
+    <section id="profile">
+        <h2>Personal Information</h2>
+        <p><strong>Name:</strong> <span id="name"></span></p>
+        <p><strong>ID:</strong> <span id="studentid"></span></p>
+        <p><strong>DOB:</strong> <span id="dob"></span></p>
+        <p><strong>Email:</strong> <span id="email"></span></p>
+    </section>
+</main>
+<script>
+    const studentID = localStorage.getItem('studentID')
+    // Fetch profile data from the server
+    fetch('http://localhost:3001/api/profile', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({studentID})
+})
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('name').textContent = data.profile.name;
+                document.getElementById('studentid').textContent = data.profile.studentid;
+                document.getElementById('dob').textContent = data.profile.dob;
+                document.getElementById('email').textContent = data.profile.email;
+            } else {
+                alert(data.message || 'Failed to fetch profile data.');
+            }
+        });
+
+</script>
+</body>
+</html>
